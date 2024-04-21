@@ -1,29 +1,49 @@
 import React from 'react';
+import { Button } from 'react-native';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 const MusicPlayer = () => {
   return (
     <View style={styles.container}>
-      <View style={styles.statusBar}>
-        <Text style={styles.time}>15:40</Text>
-        {/* Thêm các biểu tượng trạng thái khác ở đây */}
+      {/* Thanh thông tin */}
+      <View style={styles.topbar}>
+        <Text style={styles.tenlogo}>Zing Mp3</Text>
       </View>
-      <Text style={styles.playingFrom}>PHÁT TỪ Bài hát yêu thích</Text>
+
+      {/* Ảnh bìa bài hát 
       <Image
         style={styles.albumArt}
-        source={{ uri: 'đường_dẫn_ảnh_album' }}
+        source={require('./assets/Images/minhyeunhaudi.jpg')}
       />
-      <Text style={styles.songTitle}>Mình Yêu Nhau Đi</Text>
-      <Text style={styles.artist}>Bích Phương</Text>
-      <View style={styles.controls}>
-        {/* Thêm các nút điều khiển nhạc ở đây */}
+      */}
+      <View style={styles.thongtinbaihat}>
+        <Text style={styles.songTitle}>Mình Yêu Nhau Đi</Text>
+        <Text style={styles.artist}>Bích Phương</Text>
       </View>
-      <View style={styles.audioScrubber}>
-        <Text style={styles.currentTime}>0:03</Text>
-        <View style={styles.scrubberBar}></View>
-        <Text style={styles.totalTime}>3:23</Text>
+
+      {/* Khung hiển thị thời gian */}
+      <View style={styles.khungthoigian}>
+        <View style={styles.thanhthoigian}>
+          {/*Thanh thoi gian code o day*/}
+        </View>
+
+        <View style={styles.thanhthoigian2}>
+          <Text style={styles.thoigianbatdau}>0:03</Text>
+          <Text style={styles.thoigianketthuc}>3:23</Text>
+        </View>
       </View>
-      <Text style={styles.adText}>Tận hưởng âm nhạc không quảng cáo</Text>
+
+      {/* Thanh chức năng */}
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Image
+            source={require('./assets/Images/minhyeunhaudi.jpg')} // Đường dẫn đến icon trong thiết bị của bạn
+            style={{ width: 30, height: 30, marginRight: 10 }} // Tùy chỉnh kích thước của icon
+          />
+          <Text>Press me</Text>
+        </TouchableOpacity>
+      </View>
+    
     </View>
   );
 };
@@ -31,11 +51,15 @@ const MusicPlayer = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    
+    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  // Thêm các định dạng phong cách khác ở đây
+  thanhthoigian2: {
+    flex: 1,
+    flexDirection: 'row',
+  },
 });
 
 export default MusicPlayer;
