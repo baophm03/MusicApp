@@ -1,24 +1,38 @@
 import React from 'react';
-import { Button } from 'react-native';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, Button, TouchableOpacity } from 'react-native';
 
 const MusicPlayer = () => {
-  return (
-    <View style={styles.container}>
+  return (    
+   <View style={styles.container}>
+
       {/* Thanh thông tin */}
       <View style={styles.topbar}>
-        <Text style={styles.tenlogo}>Zing Mp3</Text>
+        <Text style={{fontSize: 15, fontWeight: 'bold'}}>Zing Mp3</Text>
       </View>
 
-      {/* Ảnh bìa bài hát 
-      <Image
-        style={styles.albumArt}
+      {/* Ảnh bìa bài hát */}
+      <Image style={styles.albumArt}
         source={require('./assets/Images/minhyeunhaudi.jpg')}
       />
-      */}
-      <View style={styles.thongtinbaihat}>
-        <Text style={styles.songTitle}>Mình Yêu Nhau Đi</Text>
-        <Text style={styles.artist}>Bích Phương</Text>
+      
+      <View style={styles.barthongtinbaihat}>
+
+        <TouchableOpacity style={{padding:15}}>
+          <Image style={{ width: 20, height: 20 }} // Tùy chỉnh kích thước của icon
+            source={require('./assets/Images/share.png')} // Đường dẫn đến icon trong thiết bị của bạn
+          />
+        </TouchableOpacity>
+
+        <View style={styles.thongtinbaihat}>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>Mình Yêu Nhau Đi</Text>
+          <Text style={styles.artist}>Bích Phương</Text>
+        </View>
+
+        <TouchableOpacity style={{padding:15}}>
+          <Image style={{ width: 20, height: 20 }} // Tùy chỉnh kích thước của icon
+            source={require('./assets/Images/heart.png')} // Đường dẫn đến icon trong thiết bị của bạn
+          />
+        </TouchableOpacity>
       </View>
 
       {/* Khung hiển thị thời gian */}
@@ -34,16 +48,25 @@ const MusicPlayer = () => {
       </View>
 
       {/* Thanh chức năng */}
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Image
-            source={require('./assets/Images/minhyeunhaudi.jpg')} // Đường dẫn đến icon trong thiết bị của bạn
-            style={{ width: 30, height: 30, marginRight: 10 }} // Tùy chỉnh kích thước của icon
+      <View style={styles.thanhchucnang}>
+        <TouchableOpacity style={{padding:15}}>
+          <Image style={{ width: 30, height: 30 }} // Tùy chỉnh kích thước của icon
+            source={require('./assets/Images/return.png')} // Đường dẫn đến icon trong thiết bị của bạn
           />
-          <Text>Press me</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={{padding:20}}>
+          <Image style={{width: 60, height: 60 }} // Tùy chỉnh kích thước của icon
+            source={require('./assets/Images/play.png')} // Đường dẫn đến icon trong thiết bị của bạn
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={{padding:15}}>
+          <Image style={{width: 30, height: 30}} // Tùy chỉnh kích thước của icon
+            source={require('./assets/Images/next.png')} // Đường dẫn đến icon trong thiết bị của bạn
+          />
         </TouchableOpacity>
       </View>
-    
     </View>
   );
 };
@@ -51,14 +74,33 @@ const MusicPlayer = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
-    backgroundColor: 'white',
     alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: 'white',
+    paddingTop: 40,
+  },
+
+  albumArt:{
+    alignItems: 'center',
+    margin: 30,
+    borderRadius: 200,
+    width: 300,
+    height: 300,
+  },
+  barthongtinbaihat:{
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  thongtinbaihat:{
+    alignItems: 'center',
+    width: 230,
   },
   thanhthoigian2: {
-    flex: 1,
+    justifyContent: 'space-between',
     flexDirection: 'row',
+  },
+  thanhchucnang:{
+    flexDirection:'row',
+    alignItems: 'center',
   },
 });
 
