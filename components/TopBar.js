@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Image, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-const Stack = createNativeStackNavigator()
-
 const TopBar = () => {
     return (
         <View style={styles.topbar}>

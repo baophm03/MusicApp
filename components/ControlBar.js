@@ -2,12 +2,6 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, Image, StyleSheet } from 'react-native';
 
 const ControlBar = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const togglePlay = () => {
-    setIsPlaying(!isPlaying);
-  };
-
   return (
     <View style={styles.thanhchucnang}>
       <TouchableOpacity style={{padding:15}}>
