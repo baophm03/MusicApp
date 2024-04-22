@@ -5,7 +5,6 @@ import TimeBar from './components/TimeBar';
 import ControlBar from './components/ControlBar';
 import { View, Text, StyleSheet, Image, Button, TouchableOpacity } from 'react-native';
 
-
 const MusicPlayer = () => {
   return (    
     <View style={styles.container}>
@@ -25,6 +24,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: 'white',
     paddingTop: 40,
   },

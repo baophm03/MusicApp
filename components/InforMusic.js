@@ -19,12 +19,11 @@ const InforMusic = () => {
         </TouchableOpacity>
 
         <View style={styles.thongtinbaihat}>
-
           <View style={styles.tenbaihat}>
             <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Mình Yêu Nhau Đi</Text>
           </View>
           <View style={styles.tencasi}>
-            <Text style={styles.artist}>Bích Phương</Text>
+            <Text>Bích Phương</Text>
           </View>
         </View>
 
@@ -51,16 +50,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 30,
     borderRadius: 200,
-    width: 300,
-    height: 300,
+    width: 330,
+    height: 330,
   },
   barthongtinbaihat: {
+    paddingTop: 40,
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
   thongtinbaihat: {
     alignItems: 'center',
-    width: 230,
+    width: 270,
   }
 });
 

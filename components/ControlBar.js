@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, TouchableOpacity, Image, StyleSheet } from 'react-native';
 
 const ControlBar = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const togglePlay = () => {
+    setIsPlaying(!isPlaying);
+  };
+
   return (
     <View style={styles.thanhchucnang}>
       <TouchableOpacity style={{padding:15}}>
@@ -10,9 +16,10 @@ const ControlBar = () => {
         />
       </TouchableOpacity>
 
-      <TouchableOpacity style={{padding:20}}>
-        <Image style={{width: 60, height: 60 }} // Tùy chỉnh kích thước của icon
-          source={require('../assets/Images/play.png')} // Đường dẫn đến icon trong thiết bị của bạn
+      <TouchableOpacity style={{padding:20}} onPress={togglePlay}>
+        <Image 
+          style={{width: 60, height: 60 }}
+          source={isPlaying ? require('../assets/Images/pause.png') : require('../assets/Images/play.png')}
         />
       </TouchableOpacity>
 

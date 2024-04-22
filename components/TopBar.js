@@ -1,18 +1,32 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, Image, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 const TopBar = () => {
     return (
-        <View>
-            <View style={styles.topbar}>
-                <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Zing Mp3</Text>
-            </View>
-        </View>
+        <View style={styles.topbar}>
 
+            <TouchableOpacity style={{ padding: 15 }}>
+                <Image style={{ width: 20, height: 20 }} // Tùy chỉnh kích thước của icon
+                    source={require('../assets/Images/Option.png')} // Đường dẫn đến icon trong thiết bị của bạn
+                />
+            </TouchableOpacity>
+
+            <View style={{alignItems: 'center', justifyContent: 'center', width: 270}}>
+                <Text style={{ fontSize: 15, fontWeight: 'bold'}}>Nhạc Nhẽo</Text>
+            </View>
+            
+            <TouchableOpacity style={{ padding: 15 }}>
+                <Image style={{ width: 20, height: 20 }} // Tùy chỉnh kích thước của icon
+                    source={require('../assets/Images/Question_mark.png')} // Đường dẫn đến icon trong thiết bị của bạn
+                />
+            </TouchableOpacity>
+        </View>
     );
 };
 const styles = StyleSheet.create({
-
+    topbar: {
+        flexDirection: 'row',
+    },
 });
 
 export default TopBar;
