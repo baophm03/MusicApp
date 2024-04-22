@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-const SeekBar = () => {
+const TimeBar = () => {
   return (
     <View style={styles.khungthoigian}>
       <View style={styles.thanhthoigian}>
@@ -48,4 +48,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SeekBar;
+export default TimeBar;

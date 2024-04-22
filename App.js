@@ -1,11 +1,33 @@
 import React from 'react';
-import MusicPlayer from './components/MusicPlayer';
-import { View, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import TopBar from './components/TopBar';
+import InforMusic from './components/InforMusic';
+import TimeBar from './components/TimeBar';
+import ControlBar from './components/ControlBar';
+import { View, Text, StyleSheet, Image, Button, TouchableOpacity } from 'react-native';
 
-const App = () => {
-  return (
-    <MusicPlayer />
+
+const MusicPlayer = () => {
+  return (    
+    <View style={styles.container}>
+      {/* Thanh Top */}
+      <TopBar/>
+      {/* Thông tin bài hát */}
+      <InforMusic/>
+      {/* Thanh thời gian */}
+      <TimeBar/>
+      {/* Thanh chức năng */}
+      <ControlBar/>
+    </View>
   );
 };
 
-export default App;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: 'white',
+    paddingTop: 40,
+  },
+});
+
+export default MusicPlayer;
