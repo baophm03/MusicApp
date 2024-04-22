@@ -1,11 +1,14 @@
 import React from 'react';
 import { View, Image, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
+const Stack = createNativeStackNavigator()
+
 const TopBar = () => {
     return (
         <View style={styles.topbar}>
 
-            <TouchableOpacity style={{ padding: 15 }}>
+            <TouchableOpacity onPress={() => onPress()}
+            style={{ padding: 15 }}>
                 <Image style={{ width: 20, height: 20 }} // Tùy chỉnh kích thước của icon
                     source={require('../assets/Images/Option.png')} // Đường dẫn đến icon trong thiết bị của bạn
                 />
