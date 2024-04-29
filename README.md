@@ -16,3 +16,4 @@ react-native expo
 npx create-expo-app 'TÊN DỰ ÁN'
 # chạy app
 npm start
+
