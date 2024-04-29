@@ -1,4 +1,4 @@
-# thư viện play nhạc
+# thư viện PlayerTracker
 npm install --save react-native-track-player
 
 --------------------------------------------
