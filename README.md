@@ -1,3 +1,5 @@
+# Chạy các lệnh sau trước khi chạy file
+npm install
 # thư viện PlayerTracker
 npm install --save react-native-track-player
 

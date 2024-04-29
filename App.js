@@ -129,7 +129,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: 'white',
-    paddingTop: 40,
   },
 
   albumArt: {
