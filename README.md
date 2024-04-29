@@ -7,7 +7,6 @@
     ```
     npm install --save react-native-track-player
     ```
---------------------------------------------
 
 ## Build
 Với react-native cli:
@@ -23,7 +22,7 @@ Với react-native cli:
     ```
     npm start
     ```
-
+--------------------------------------------
 Với react-native expo:
 - Tạo project:
     ```
