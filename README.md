@@ -1,2 +1,0 @@
-App Music
-#npm install
