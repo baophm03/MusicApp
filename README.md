@@ -1,18 +1,34 @@
-# thư viện PlayerTracker
-npm install --save react-native-track-player
+## Start
+- Chạy các lệnh sau trước khi bắt đầu
+    ```
+    npm install
+    ```
+- Cài thư viện PlayerTracker
+    ```
+    npm install --save react-native-track-player
+    ```
 
+## Build
+Với react-native cli:
+- Tạo project
+    ```
+    npx react-native@latest init 'TÊN DỰ ÁN'
+    ```
+- Chạy lần đầu
+    ```
+    npx react-native run-android
+    ```
+- Các lần chạy sau
+    ```
+    npm start
+    ```
 --------------------------------------------
-react-native cli
-# tạo project
-npx react-native@latest init 'TÊN DỰ ÁN'
-# chạy app lần đầu
-npx react-native run-android
-# các lần chạy sau
-npm start
-
---------------------------------------------
-react-native expo
-# tạo project
-npx create-expo-app 'TÊN DỰ ÁN'
-# chạy app
-npm start
+Với react-native expo:
+- Tạo project:
+    ```
+    npx create-expo-app 'TÊN DỰ ÁN'
+    ```
+- Chạy app:
+    ```
+    npm start
+    ```
