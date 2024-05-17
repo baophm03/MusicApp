@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import TrackPlayer, { State, Event, useTrackPlayerEvents, useProgress } from 'react-native-track-player';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Animated } from 'react-native';
 import tracks from './tracks';
 
 TrackPlayer.updateOptions({
@@ -26,6 +26,7 @@ function secondsToMMSS(seconds) {
 const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState(null);
+  const spinValue = useRef(new Animated.Value(0)).current;
 
   const setUpTrackPlayer = async () => {
     try {
@@ -38,8 +39,13 @@ const MusicPlayer = () => {
   };
 
   useEffect(() => {
-    setUpTrackPlayer();
-
+    const initializePlayer = async () => {
+      await setUpTrackPlayer(); // Đợi khởi tạo xong
+      startRotation();
+    };
+  
+    initializePlayer();
+    
     return () => TrackPlayer.destroy();
   }, []);
 
@@ -61,37 +67,59 @@ const MusicPlayer = () => {
     }
   };
 
-  const time = useProgress();
 
+  const startRotation = () => {
+    Animated.loop(
+      Animated.timing(spinValue, {
+        toValue: 1,
+        duration: 25000,
+        easing: linearEasing, // Sử dụng easing function mới
+        useNativeDriver: false,
+      })
+    ).start();
+  };
+
+  const linearEasing = (value) => value;
+
+  const spin = spinValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  })
+
+  const time = useProgress();
   const time1 = roundNumber(time.position);
   const time2 = roundNumber(time.duration);
+
   function roundNumber(number) {
-    // Làm tròn số về phía trước nếu phần thập phân nhỏ hơn 0.5, ngược lại làm tròn về phía sau
     return number % 1 < 0.5 ? Math.floor(number) : Math.ceil(number);
   }
 
-
   const thoigianbatdau = secondsToMMSS(time1);
   const thoigianketthuc = secondsToMMSS(time2);
+
+
   return (
     <View style={styles.container}>
       {/* Thanh thông tin */}
       <View style={styles.topbar}>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ fontSize: 17, fontWeight: 'bold', color: 'black' }}>Nhạc Nhẽo</Text>
+          <Text style={{ fontSize: 17, color: 'black' }}>Nhạc Nhẽo</Text>
         </View>
       </View>
 
       {/* Ảnh bìa bài hát */}
       {currentTrack && (
-        <Image style={styles.albumArt} source={currentTrack.artwork} />
+        <Animated.Image
+          style={[styles.albumArt, { transform: [{ rotate: spin }] }]}
+          source={currentTrack.artwork}
+        />
       )}
 
       {/* Bar thông tin bài hát*/}
       <View style={styles.barthongtinbaihat}>
-
         <TouchableOpacity>
-          <Image style={{ width: 20, height: 20 }} // Tùy chỉnh kích thước của icon
+          <Image
+            style={{ width: 20, height: 20 }} // Tùy chỉnh kích thước của icon
             source={require('./assets/Images/share.png')} // Đường dẫn đến icon trong thiết bị của bạn
           />
         </TouchableOpacity>
@@ -100,14 +128,15 @@ const MusicPlayer = () => {
         <View style={styles.thongtinbaihat}>
           {currentTrack && (
             <>
-              <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black'}}>{currentTrack.title}</Text>
-              <Text style={styles.artist}>{currentTrack.artist}</Text>
+              <Text style={{ fontSize: 22, textAlign: 'center', fontWeight: 'bold', color: 'black' }}>{currentTrack.title}</Text>
+              <Text style={{ fontSize: 15, color: 'black' }}>{currentTrack.artist}</Text>
             </>
           )}
         </View>
 
         <TouchableOpacity>
-          <Image style={{ width: 20, height: 20 }} // Tùy chỉnh kích thước của icon
+          <Image
+            style={{ width: 20, height: 20 }} // Tùy chỉnh kích thước của icon
             source={require('./assets/Images/heart.png')} // Đường dẫn đến icon trong thiết bị của bạn
           />
         </TouchableOpacity>
@@ -115,35 +144,37 @@ const MusicPlayer = () => {
 
       {/* Khung hiển thị thời gian */}
       <View style={styles.khungthoigian}>
-      <View style={styles.thanhthoigian}>
-          <View style={[styles.thanhthoigianDo, { width: `${(time1 / time2) * 100}%` }]} />
+        <View style={styles.thanhthoigian}>
+          <View style={[styles.thanhthoigianTrang, { width: `${(time1 / time2) * 100}%` }]} />
+          <View style={[styles.cucthoigian]} />
           <View style={[styles.thanhthoigianXanh, { width: `${((time2 - time1) / time2) * 100}%` }]} />
         </View>
 
         <View style={styles.thanhthoigian2}>
-          <Text style={styles.thoigianbatdau}>{(thoigianbatdau)}</Text>
-          <Text style={styles.thoigianketthuc}>{(thoigianketthuc)}</Text>
+          <Text style={styles.thoigianbatdau}>{thoigianbatdau}</Text>
+          <Text style={styles.thoigianketthuc}>{thoigianketthuc}</Text>
         </View>
       </View>
 
       {/* Thanh chức năng */}
       <View style={styles.thanhchucnang}>
-        <TouchableOpacity style={{ padding: 20 }}
-          onPress={() => TrackPlayer.skipToPrevious()}>
-          <Image style={{ width: 30, height: 30 }} // Tùy chỉnh kích thước của icon
+        <TouchableOpacity style={{ padding: 20 }} onPress={() => TrackPlayer.skipToPrevious()}>
+          <Image
+            style={{ width: 30, height: 30 }} // Tùy chỉnh kích thước của icon
             source={require('./assets/Images/Previous.png')} // Đường dẫn đến icon trong thiết bị của bạn
           />
         </TouchableOpacity>
 
         <TouchableOpacity style={{ padding: 30 }} onPress={togglePlayPause}>
-          <Image style={{ width: 60, height: 60 }} // Tùy chỉnh kích thước của icon
+          <Image
+            style={{ width: 60, height: 60 }} // Tùy chỉnh kích thước của icon
             source={isPlaying ? require('./assets/Images/pause.png') : require('./assets/Images/play.png')} // Đường dẫn đến icon trong thiết bị của bạn
           />
         </TouchableOpacity>
 
-        <TouchableOpacity style={{ padding: 20 }}
-          onPress={() => TrackPlayer.skipToNext()}>
-          <Image style={{ width: 30, height: 30 }} // Tùy chỉnh kích thước của icon
+        <TouchableOpacity style={{ padding: 20 }} onPress={() => TrackPlayer.skipToNext()}>
+          <Image
+            style={{ width: 30, height: 30 }} // Tùy chỉnh kích thước của icon
             source={require('./assets/Images/next.png')} // Đường dẫn đến icon trong thiết bị của bạn
           />
         </TouchableOpacity>
@@ -157,7 +188,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: 'white',
-    backgroundColor: 'pink',
+    backgroundColor: 'rgba(1, 1, 1, 0.2)',
   },
   topbar: {
     paddingTop: 10,
@@ -181,29 +212,38 @@ const styles = StyleSheet.create({
   thongtinbaihat: {
     alignItems: 'center',
     textAlign: 'center',
-    width: 230,
   },
-  khungthoigian: {
-    marginTop: 20,
-    width: '90%',
-  },
+
   thanhthoigian: {
+    width: '86%',
     flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 10,
   },
-  thanhthoigianDo: {
-    backgroundColor: 'red',
+  thanhthoigianTrang: {
+    backgroundColor: 'white',
     height: 5,
-    borderRadius: 2.5,
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+  },
+  cucthoigian: {
+    backgroundColor: 'white',
+    height: 15,
+    width: 15,
+    borderRadius: 20,
   },
   thanhthoigianXanh: {
-    backgroundColor: 'lightgreen',
+    backgroundColor: 'rgba(128, 128, 128, 0.3)',
     height: 5,
-    borderRadius: 2.5,
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
   },
   thanhthoigian2: {
     justifyContent: 'space-between',
     flexDirection: 'row',
     marginTop: 5,
+    alignItems: 'center',
   },
   thoigianbatdau: {
     fontSize: 14,
