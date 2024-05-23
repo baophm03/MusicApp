@@ -3,10 +3,17 @@
     ```
     npm install
     ```
-- Cài thư viện PlayerTracker
+- Cài PlayerTracker
     ```
     npm install --save react-native-track-player
     ```
+- Cài Navigation
+    npm install @react-navigation/native
+    ```
+    npm install @react-navigation/bottom-tabs
+    ```
+- 
+    npm install react-native-image-colors
 
 ## Build
 Với react-native cli:
