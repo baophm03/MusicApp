@@ -1,262 +1,47 @@
-import React, { useEffect, useState, useRef } from 'react';
-import TrackPlayer, { State, Event, useTrackPlayerEvents, useProgress } from 'react-native-track-player';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Animated } from 'react-native';
-import tracks from './tracks';
+import * as React from 'react';
+import { Text, View, Image } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import MusicPlayer from './components/MusicPlayer';
+import TrackList from './components/TrackList';
 
-TrackPlayer.updateOptions({
-  stopWithApp: false,
-  capabilities: [TrackPlayer.CAPABILITY_PLAY, TrackPlayer.CAPABILITY_PAUSE],
-  compactCapabilities: [
-    TrackPlayer.CAPABILITY_PLAY,
-    TrackPlayer.CAPABILITY_PAUSE,
-  ],
-});
+const Tab = createBottomTabNavigator();
 
-// Hàm chuyển đổi thời gian từ giây sang định dạng "hh:mm:ss"
-function secondsToMMSS(seconds) {
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = seconds % 60;
-
-  const formattedMinutes = String(minutes).padStart(2, '0');
-  const formattedSeconds = String(remainingSeconds).padStart(2, '0');
-
-  return `${formattedMinutes}:${formattedSeconds}`;
-}
-
-const MusicPlayer = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTrack, setCurrentTrack] = useState(null);
-  const spinValue = useRef(new Animated.Value(0)).current;
-
-  const setUpTrackPlayer = async () => {
-    try {
-      await TrackPlayer.setupPlayer();
-      await TrackPlayer.add(tracks);
-      console.log('Tracks added');
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  useEffect(() => {
-    const initializePlayer = async () => {
-      await setUpTrackPlayer(); // Đợi khởi tạo xong
-      startRotation();
-    };
-  
-    initializePlayer();
-    
-    return () => TrackPlayer.destroy();
-  }, []);
-
-  useTrackPlayerEvents([Event.PlaybackTrackChanged], async (event) => {
-    if (event.type === Event.PlaybackTrackChanged && event.nextTrack != null) {
-      const track = await TrackPlayer.getTrack(event.nextTrack);
-      setCurrentTrack(track);
-    }
-  });
-
-  const togglePlayPause = async () => {
-    const currentState = await TrackPlayer.getState();
-    if (currentState === State.Playing) {
-      await TrackPlayer.pause();
-      setIsPlaying(false);
-    } else {
-      await TrackPlayer.play();
-      setIsPlaying(true);
-    }
-  };
-
-
-  const startRotation = () => {
-    Animated.loop(
-      Animated.timing(spinValue, {
-        toValue: 1,
-        duration: 25000,
-        easing: linearEasing, // Sử dụng easing function mới
-        useNativeDriver: false,
-      })
-    ).start();
-  };
-
-  const linearEasing = (value) => value;
-
-  const spin = spinValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  })
-
-  const time = useProgress();
-  const time1 = roundNumber(time.position);
-  const time2 = roundNumber(time.duration);
-
-  function roundNumber(number) {
-    return number % 1 < 0.5 ? Math.floor(number) : Math.ceil(number);
-  }
-
-  const thoigianbatdau = secondsToMMSS(time1);
-  const thoigianketthuc = secondsToMMSS(time2);
-
-
+const App = () => {
   return (
-    <View style={styles.container}>
-      {/* Thanh thông tin */}
-      <View style={styles.topbar}>
-        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ fontSize: 17, color: 'black' }}>Nhạc Nhẽo</Text>
-        </View>
-      </View>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
 
-      {/* Ảnh bìa bài hát */}
-      {currentTrack && (
-        <Animated.Image
-          style={[styles.albumArt, { transform: [{ rotate: spin }] }]}
-          source={currentTrack.artwork}
-        />
-      )}
+              if (route.name === 'Music Player') {
+                iconName = focused
+                  ? require('./assets/Images/home.png')
+                  : require('./assets/Images/home.png');
+              } else if (route.name === 'Danh Sách') {
+                iconName = focused
+                  ? require('./assets/Images/list.png')
+                  : require('./assets/Images/list.png');
+              }
 
-      {/* Bar thông tin bài hát*/}
-      <View style={styles.barthongtinbaihat}>
-        <TouchableOpacity>
-          <Image
-            style={{ width: 20, height: 20 }} // Tùy chỉnh kích thước của icon
-            source={require('./assets/Images/share.png')} // Đường dẫn đến icon trong thiết bị của bạn
-          />
-        </TouchableOpacity>
-
-        {/* Thông tin bài hát*/}
-        <View style={styles.thongtinbaihat}>
-          {currentTrack && (
-            <>
-              <Text style={{ fontSize: 22, textAlign: 'center', fontWeight: 'bold', color: 'black' }}>{currentTrack.title}</Text>
-              <Text style={{ fontSize: 15, color: 'black' }}>{currentTrack.artist}</Text>
-            </>
-          )}
-        </View>
-
-        <TouchableOpacity>
-          <Image
-            style={{ width: 20, height: 20 }} // Tùy chỉnh kích thước của icon
-            source={require('./assets/Images/heart.png')} // Đường dẫn đến icon trong thiết bị của bạn
-          />
-        </TouchableOpacity>
-      </View>
-
-      {/* Khung hiển thị thời gian */}
-      <View style={styles.khungthoigian}>
-        <View style={styles.thanhthoigian}>
-          <View style={[styles.thanhthoigianTrang, { width: `${(time1 / time2) * 100}%` }]} />
-          <View style={[styles.cucthoigian]} />
-          <View style={[styles.thanhthoigianXanh, { width: `${((time2 - time1) / time2) * 100}%` }]} />
-        </View>
-
-        <View style={styles.thanhthoigian2}>
-          <Text style={styles.thoigianbatdau}>{thoigianbatdau}</Text>
-          <Text style={styles.thoigianketthuc}>{thoigianketthuc}</Text>
-        </View>
-      </View>
-
-      {/* Thanh chức năng */}
-      <View style={styles.thanhchucnang}>
-        <TouchableOpacity style={{ padding: 20 }} onPress={() => TrackPlayer.skipToPrevious()}>
-          <Image
-            style={{ width: 30, height: 30 }} // Tùy chỉnh kích thước của icon
-            source={require('./assets/Images/Previous.png')} // Đường dẫn đến icon trong thiết bị của bạn
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={{ padding: 30 }} onPress={togglePlayPause}>
-          <Image
-            style={{ width: 60, height: 60 }} // Tùy chỉnh kích thước của icon
-            source={isPlaying ? require('./assets/Images/pause.png') : require('./assets/Images/play.png')} // Đường dẫn đến icon trong thiết bị của bạn
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={{ padding: 20 }} onPress={() => TrackPlayer.skipToNext()}>
-          <Image
-            style={{ width: 30, height: 30 }} // Tùy chỉnh kích thước của icon
-            source={require('./assets/Images/next.png')} // Đường dẫn đến icon trong thiết bị của bạn
-          />
-        </TouchableOpacity>
-      </View>
-    </View>
+              // You can return any component that you like here!
+              return <Image source={iconName} style={{ width: size, height: size, tintColor: color }} />;
+            },
+          })}
+          tabBarOptions={{
+            activeTintColor: 'tomato',
+            inactiveTintColor: 'gray',
+          }}
+        >
+          <Tab.Screen name="Music Player" component={MusicPlayer} />
+          <Tab.Screen name="Danh Sách" component={TrackList} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: 'white',
-    backgroundColor: 'rgba(1, 1, 1, 0.2)',
-  },
-  topbar: {
-    paddingTop: 10,
-    paddingBottom: 40,
-  },
-  albumArt: {
-    alignItems: 'center',
-    margin: 30,
-    borderRadius: 200,
-    width: 330,
-    height: 330,
-  },
-  barthongtinbaihat: {
-    paddingTop: 40,
-    paddingBottom: 40,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '90%',
-    alignItems: 'center',
-  },
-  thongtinbaihat: {
-    alignItems: 'center',
-    textAlign: 'center',
-  },
-
-  thanhthoigian: {
-    width: '86%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: 10,
-  },
-  thanhthoigianTrang: {
-    backgroundColor: 'white',
-    height: 5,
-    borderTopLeftRadius: 10,
-    borderBottomLeftRadius: 10,
-  },
-  cucthoigian: {
-    backgroundColor: 'white',
-    height: 15,
-    width: 15,
-    borderRadius: 20,
-  },
-  thanhthoigianXanh: {
-    backgroundColor: 'rgba(128, 128, 128, 0.3)',
-    height: 5,
-    borderTopRightRadius: 10,
-    borderBottomRightRadius: 10,
-  },
-  thanhthoigian2: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    marginTop: 5,
-    alignItems: 'center',
-  },
-  thoigianbatdau: {
-    fontSize: 14,
-  },
-  thoigianketthuc: {
-    fontSize: 14,
-  },
-  thanhchucnang: {
-    paddingTop: 30,
-    paddingBottom: 40,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-});
-
-export default MusicPlayer;
+export default App;
