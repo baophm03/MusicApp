@@ -28,11 +28,11 @@ const MusicPlayer = () => {
 
   };
   useEffect(() => {
-    if (currentTrack && Array.isArray(favoriteTracks)) { 
+    if (currentTrack && Array.isArray(favoriteTracks)) {
       setIsFavorited(favoriteTracks.includes(currentTrack.id));
     }
   }, [favoriteTracks, currentTrack]);
-  
+
   useEffect(() => {
     const initializePlayer = async () => {
       await setUpTrackPlayer(); // Đợi khởi tạo xong
@@ -71,7 +71,7 @@ const MusicPlayer = () => {
       Animated.timing(spinValue, {
         toValue: 1,
         duration: 25000,
-        easing: linearEasing, // Sử dụng easing function mới
+        easing: linearEasing,
         useNativeDriver: false,
       })
     ).start();
@@ -105,7 +105,7 @@ const MusicPlayer = () => {
 
   const thoigianbatdau = secondsToMMSS(time1);
   const thoigianketthuc = secondsToMMSS(time2);
-  
+
   const handleToggleFavorite = () => {
     if (isFavorited) {
       // Nếu bài hát đã được yêu thích, xóa khỏi danh sách
@@ -116,6 +116,7 @@ const MusicPlayer = () => {
     }
     setIsFavorited(!isFavorited); // Đảo ngược trạng thái yêu thích
   };
+
   return (
     <View style={styles.container}>
 
@@ -148,7 +149,7 @@ const MusicPlayer = () => {
         <TouchableOpacity onPress={handleToggleFavorite}>
           <Image
             style={{ width: 20, height: 20 }} // Tùy chỉnh kích thước của icon
-            source={isFavorited ? require('../assets/Images/heart2.png') : require('../assets/Images/heart.png')}/>
+            source={isFavorited ? require('../assets/Images/heart2.png') : require('../assets/Images/heart.png')} />
         </TouchableOpacity>
       </View>
 

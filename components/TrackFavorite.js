@@ -9,12 +9,12 @@ const TrackFavorite = ({ navigation }) => {
   const filteredTracks = favoriteTracks
     ? tracks.filter(track => favoriteTracks.includes(track.id))
     : [];
-  const playTrack = async (trackId) => {
-    const parsedTrackId = parseInt(trackId, 10); // Chuyển đổi trackId sang kiểu số
-
-    await TrackPlayer.skip(parsedTrackId); // Nhảy đến bài hát được chọn
-
-    // Điều hướng đến màn hình trình phát nhạc
+  const playTrack = async (trackId) => { 
+    // Chuyển đổi trackId sang kiểu số
+    const parsedTrackId = parseInt(trackId, 10);
+    
+    // Nhảy đến bài hát được chọn
+    await TrackPlayer.skip(parsedTrackId); 
     navigation.navigate('Music Player');
   };
 

@@ -3,23 +3,16 @@ import TrackPlayer from 'react-native-track-player';
 import tracks from './tracks';
 
 const TrackListAll = ({ navigation }) => {
-    let stt = 1; // Khởi tạo biến đếm
-
     const playTrack = async (trackId) => {
-        const parsedTrackId = parseInt(trackId, 10); // Chuyển đổi trackId sang kiểu số
-    
-        await TrackPlayer.skip(parsedTrackId); // Nhảy đến bài hát được chọn
-    
-        // Điều hướng đến màn hình trình phát nhạc
+        const parsedTrackId = parseInt(trackId, 10);
+        // Nhảy đến bài hát được chọn
+        await TrackPlayer.skip(parsedTrackId);
         navigation.navigate('Music Player');
     };
-
-    const renderItem = ({ item }) => {
-        const currentStt = stt;
-        stt++; // Tăng giá trị của biến đếm
+    const renderItem = ({ item, index }) => {
         return (
             <TouchableOpacity style={styles.trackItem} onPress={() => playTrack(item.id)}>
-                <Text style={styles.stt}>{currentStt}</Text>
+                <Text style={styles.stt}>{index + 1}</Text>
                 <Image source={item.artwork} style={styles.artwork} />
                 <View style={styles.trackInfo}>
                     <Text style={styles.title}>{item.title}</Text>

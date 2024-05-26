@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import TrackFavorite from './TrackFavorite';
 import TrackListAll from './TrackListAll';
-import FavoriteTracksContext from './FavoriteTracksContext'; // Import context
+import FavoriteTracksContext from './FavoriteTracksContext';
 
 const Tab = createMaterialTopTabNavigator();
 

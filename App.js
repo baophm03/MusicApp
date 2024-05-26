@@ -15,36 +15,36 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <FavoriteTracksProvider>
-      <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
+        <NavigationContainer>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
 
-              if (route.name === 'Music Player') {
-                iconName = focused
-                  ? require('./assets/Images/home.png')
-                  : require('./assets/Images/home.png');
-              } else if (route.name === 'Danh Sách') {
-                iconName = focused
-                  ? require('./assets/Images/list.png')
-                  : require('./assets/Images/list.png');
-              }
+                if (route.name === 'Music Player') {
+                  iconName = focused
+                    ? require('./assets/Images/home.png')
+                    : require('./assets/Images/home.png');
+                } else if (route.name === 'Danh Sách') {
+                  iconName = focused
+                    ? require('./assets/Images/list.png')
+                    : require('./assets/Images/list.png');
+                }
 
-              return <Image source={iconName} style={{ width: size, height: size, tintColor: color }} />;
-            },
-          })}
-          tabBarOptions={{
-            activeTintColor: 'tomato',
-            inactiveTintColor: 'gray',
-          }}
-        >
-          <Tab.Screen name="Music Player">
-            {(props) => <MusicPlayer {...props} favoriteTracks={favoriteTracks} setFavoriteTracks={setFavoriteTracks} />}
-          </Tab.Screen>
-          <Tab.Screen name="Danh Sách" component={TrackList} />
-        </Tab.Navigator>
-      </NavigationContainer>
+                return <Image source={iconName} style={{ width: size, height: size, tintColor: color }} />;
+              },
+            })}
+            tabBarOptions={{
+              activeTintColor: 'tomato',
+              inactiveTintColor: 'gray',
+            }}
+          >
+            <Tab.Screen name="Music Player">
+              {(props) => <MusicPlayer {...props} favoriteTracks={favoriteTracks} setFavoriteTracks={setFavoriteTracks} />}
+            </Tab.Screen>
+            <Tab.Screen name="Danh Sách" component={TrackList} />
+          </Tab.Navigator>
+        </NavigationContainer>
       </FavoriteTracksProvider>
     </SafeAreaProvider>
   );
