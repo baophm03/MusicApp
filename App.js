@@ -1,16 +1,20 @@
-import * as React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Text, View, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import MusicPlayer from './components/MusicPlayer';
 import TrackList from './components/TrackList';
+import { FavoriteTracksProvider } from './components/FavoriteTracksContext'; // Hoặc đường dẫn đến file FavoriteTracksContext.js của bạn
 
 const Tab = createBottomTabNavigator();
 
 const App = () => {
+  const [favoriteTracks, setFavoriteTracks] = useState([]);
+
   return (
     <SafeAreaProvider>
+      <FavoriteTracksProvider>
       <NavigationContainer>
         <Tab.Navigator
           screenOptions={({ route }) => ({
@@ -27,7 +31,6 @@ const App = () => {
                   : require('./assets/Images/list.png');
               }
 
-              // You can return any component that you like here!
               return <Image source={iconName} style={{ width: size, height: size, tintColor: color }} />;
             },
           })}
@@ -36,10 +39,13 @@ const App = () => {
             inactiveTintColor: 'gray',
           }}
         >
-          <Tab.Screen name="Music Player" component={MusicPlayer} />
+          <Tab.Screen name="Music Player">
+            {(props) => <MusicPlayer {...props} favoriteTracks={favoriteTracks} setFavoriteTracks={setFavoriteTracks} />}
+          </Tab.Screen>
           <Tab.Screen name="Danh Sách" component={TrackList} />
         </Tab.Navigator>
       </NavigationContainer>
+      </FavoriteTracksProvider>
     </SafeAreaProvider>
   );
 };
