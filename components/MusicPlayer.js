@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import TrackPlayer, { State, Event, useTrackPlayerEvents, useProgress } from 'react-native-track-player';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Animated } from 'react-native';
 import tracks from '../components/tracks';
+import FavoriteTracksContext from './FavoriteTracksContext'; // Import context
 
 TrackPlayer.updateOptions({
   stopWithApp: false,
@@ -17,16 +18,26 @@ const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState(null);
   const spinValue = useRef(new Animated.Value(0)).current;
+  const [isFavorited, setIsFavorited] = useState(false);
+  const { favoriteTracks, setFavoriteTracks } = useContext(FavoriteTracksContext);
+
 
   const setUpTrackPlayer = async () => {
     await TrackPlayer.setupPlayer();
     await TrackPlayer.add(tracks);
+
   };
+  useEffect(() => {
+    if (currentTrack && Array.isArray(favoriteTracks)) {
+      setIsFavorited(favoriteTracks.includes(currentTrack.id));
+    }
+  }, [favoriteTracks, currentTrack]);
 
   useEffect(() => {
     const initializePlayer = async () => {
       await setUpTrackPlayer(); // Đợi khởi tạo xong
       startRotation();
+
     };
 
     initializePlayer();
@@ -35,6 +46,7 @@ const MusicPlayer = () => {
   }, []);
 
   useTrackPlayerEvents([Event.PlaybackTrackChanged], async (event) => {
+
     if (event.type === Event.PlaybackTrackChanged && event.nextTrack != null) {
       const track = await TrackPlayer.getTrack(event.nextTrack);
       setCurrentTrack(track);
@@ -59,7 +71,7 @@ const MusicPlayer = () => {
       Animated.timing(spinValue, {
         toValue: 1,
         duration: 25000,
-        easing: linearEasing, // Sử dụng easing function mới
+        easing: linearEasing,
         useNativeDriver: false,
       })
     ).start();
@@ -70,7 +82,7 @@ const MusicPlayer = () => {
   const spin = spinValue.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg'],
-  })
+  });
 
   // Hàm chuyển đổi thời gian từ giây sang định dạng "hh:mm:ss"
   function secondsToMMSS(seconds) {
@@ -82,6 +94,7 @@ const MusicPlayer = () => {
 
     return `${formattedMinutes}:${formattedSeconds}`;
   }
+
   const time = useProgress();
   const time1 = roundNumber(time.position);
   const time2 = roundNumber(time.duration);
@@ -92,7 +105,18 @@ const MusicPlayer = () => {
 
   const thoigianbatdau = secondsToMMSS(time1);
   const thoigianketthuc = secondsToMMSS(time2);
-  
+
+  const handleToggleFavorite = () => {
+    if (isFavorited) {
+      // Nếu bài hát đã được yêu thích, xóa khỏi danh sách
+      setFavoriteTracks(favoriteTracks.filter(trackId => trackId !== currentTrack.id));
+    } else {
+      // Nếu bài hát chưa được yêu thích, thêm vào danh sách
+      setFavoriteTracks([...favoriteTracks, currentTrack.id]);
+    }
+    setIsFavorited(!isFavorited); // Đảo ngược trạng thái yêu thích
+  };
+
   return (
     <View style={styles.container}>
 
@@ -121,12 +145,11 @@ const MusicPlayer = () => {
             </>
           )}
         </View>
-        
-        <TouchableOpacity>
+
+        <TouchableOpacity onPress={handleToggleFavorite}>
           <Image
             style={{ width: 20, height: 20 }} // Tùy chỉnh kích thước của icon
-            source={require('../assets/Images/heart.png')} // Đường dẫn đến icon trong thiết bị của bạn
-          />
+            source={isFavorited ? require('../assets/Images/heart2.png') : require('../assets/Images/heart.png')} />
         </TouchableOpacity>
       </View>
 
@@ -170,7 +193,6 @@ const MusicPlayer = () => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -244,4 +266,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
 export default MusicPlayer;
