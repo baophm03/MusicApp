@@ -1,8 +1,22 @@
 import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import TrackPlayer from 'react-native-track-player';
 import tracks from './tracks';
+import SearchBar from './SearchBar'; // Import SearchBar
+import React, { useState } from 'react'; // Import useState
 
 const TrackListAll = ({ navigation }) => {
+    const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = (text) => {
+    setSearchTerm(text);
+  };
+
+  const filteredTracks = searchTerm
+  ? tracks.filter(track => 
+      track.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      track.artist.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  : tracks;
     const playTrack = async (trackId) => {
         const parsedTrackId = parseInt(trackId, 10);
         // Nhảy đến bài hát được chọn
@@ -24,10 +38,12 @@ const TrackListAll = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+        <SearchBar onSearch={handleSearch} />
             <FlatList
-                data={tracks}
+                data={filteredTracks}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id.toString()}
+                extraData={filteredTracks}
             />
         </View>
     );

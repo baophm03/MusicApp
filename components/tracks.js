@@ -69,7 +69,13 @@ const tracks = [
     artist: 'Đen ft. Phương Anh Đào',
     artwork: require('../assets/Musics/loinho/loinho.jpg'),
   },
-  
+  {
+    id: '10',
+    url: require('../assets/Musics/exitsign/exitsign.mp3'),
+    title: 'Exit Sign',
+    artist: 'HIEUTHUHAI',
+    artwork: require('../assets/Musics/exitsign/exitsign.jpg'),
+  },
 ];
 
 export default tracks;
